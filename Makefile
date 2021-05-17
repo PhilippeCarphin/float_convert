@@ -1,6 +1,11 @@
 include colors.mk
 .PHONY: pyfloat_output cfloat_output
 
+all:
+	$(call make_echo_run_test,"Showing output of both files")
+	@$(MAKE) cfloat_output
+	@$(MAKE) pyfloat_output
+
 %.o:%.c
 	$(call make_echo_build_c_object)
 	@gcc -c -o$@ $<
@@ -11,11 +16,11 @@ cfloat:cfloat.o
 
 cfloat_output: cfloat
 	$(call make_echo_generate_file)
-	./$< | tee $@
+	@./$< | tee $@
 
 pyfloat_output: pyfloat.py
 	$(call make_echo_generate_file)
-	python3 $< | tee $@
+	@python3 $< | tee $@
 
 test:cfloat_output pyfloat_output
 	$(call make_echo_run_test,"Comparing $^")
